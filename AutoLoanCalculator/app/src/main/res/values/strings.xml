@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Auto Loan Calculator</string>
+    <string name="app_header">Auto Loan Calculator</string>
+    <string name="loan_amount_label">Enter a loan amount</string>
+    <string name="loan_amount">Loan Amount</string>
+    <string name="interest_rate_label">Enter an interest rate</string>
+    <string name="interest_rate">Interest Rate</string>
+    <string name="loan_term_label">Enter a loan term in months</string>
+    <string name="loan_term">Loan Term</string>
+</resources>

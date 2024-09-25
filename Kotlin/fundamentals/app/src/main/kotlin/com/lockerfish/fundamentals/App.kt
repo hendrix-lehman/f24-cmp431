@@ -67,21 +67,31 @@ class App {
 fun main() {
   val app = App()
 
-  app.eat()
-  app.sleep(8)
-  app.mix(1, true, lucky = 7)
+  // Dealing with lists
+  val list = listOf(1, 2, 3, "not an integer", 5)
+  val filteredList = list.filter { it is String }
+  println("the filtered list is $filteredList")
 
-  app.thisFunctionTakesAnotherFunctionAsParameter(5, 7, app::add)
+  // list of names
+  val names = listOf("Alice", "Bob", "Charlie", "Diana", "Eve")
+  val nameThatEndsWithE = names.find { it.length > 4 }
+  println("the name that ends with E is $nameThatEndsWithE")
 
-  app.thisFunctionTakesAnotherFunctionAsParameter(3, 5, fun(a, b) = a * b)
-
-  val addVariableFunction = app.returnsTheAddFunction()
-  val sum = addVariableFunction(2, 4)
-  println("the sum is $sum")
-
-  val multiplyVariableFunction = app.returnsTheMultiplyFunction()
-  val product = multiplyVariableFunction(2, 4)
-  println("the product is $product")
+  // app.eat()
+  // app.sleep(8)
+  // app.mix(1, true, lucky = 7)
+  //
+  // app.thisFunctionTakesAnotherFunctionAsParameter(5, 7, app::add)
+  //
+  // app.thisFunctionTakesAnotherFunctionAsParameter(3, 5, fun(a, b) = a * b)
+  //
+  // val addVariableFunction = app.returnsTheAddFunction()
+  // val sum = addVariableFunction(2, 4)
+  // println("the sum is $sum")
+  //
+  // val multiplyVariableFunction = app.returnsTheMultiplyFunction()
+  // val product = multiplyVariableFunction(2, 4)
+  // println("the product is $product")
 
   // val result = app.hello()
   // app.name = "Hendrix"
