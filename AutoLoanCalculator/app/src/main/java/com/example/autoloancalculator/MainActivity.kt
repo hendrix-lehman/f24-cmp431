@@ -140,6 +140,14 @@ fun calculateMonthlyPayment(loanAmount: Double, interestRate: Double, loanTerm: 
   return round(monthlyPayment)
 }
 
+fun greeting(name: String): String {
+
+  if (name.isEmpty()) {
+    return "Hello!"
+  }
+  return "Hello ${name}!"
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
