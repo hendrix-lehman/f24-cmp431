@@ -7,4 +7,5 @@
     <string name="interest_rate">Interest Rate</string>
     <string name="loan_term_label">Enter a loan term in months</string>
     <string name="loan_term">Loan Term</string>
+    <string name="calculate">Calculate Monthly Payment</string>
 </resources>

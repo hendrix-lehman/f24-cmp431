@@ -1,5 +1,6 @@
 package com.example.autoloancalculator
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,6 +39,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.autoloancalculator.ui.theme.AutoLoanCalculatorTheme
+import kotlin.math.pow
+import kotlin.math.round
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +54,14 @@ class MainActivity : ComponentActivity() {
   }
 }
 
+@SuppressLint("DefaultLocale")
 @Preview
 @Composable
 fun AutoLoanCalculatorApp() {
   var loanAmount by remember { mutableStateOf("") }
   var interestRate by remember { mutableStateOf("") }
   var loanTerm by remember { mutableStateOf("") }
+  var monthlyPayment by remember { mutableStateOf("0.00") }
 
   Scaffold(
     topBar = {
@@ -77,6 +83,7 @@ fun AutoLoanCalculatorApp() {
           .padding(innerPadding)
       ) {
         EditNumberField(
+          modifier = Modifier.padding(bottom = 32.dp),
           value = loanAmount,
           onValueChange = { loanAmount = it },
           label = stringResource(R.string.loan_amount),
@@ -86,9 +93,9 @@ fun AutoLoanCalculatorApp() {
               stringResource(R.string.loan_amount),
             )
           },
-          modifier = Modifier.padding(bottom = 32.dp)
         )
         EditNumberField(
+          modifier = Modifier.padding(bottom = 32.dp),
           value = interestRate,
           onValueChange = { interestRate = it },
           label = stringResource(R.string.interest_rate_label),
@@ -98,21 +105,41 @@ fun AutoLoanCalculatorApp() {
               stringResource(R.string.interest_rate_label),
             )
           },
-          modifier = Modifier.padding(bottom = 32.dp)
         )
         EditNumberField(
+          modifier = Modifier.padding(bottom = 32.dp),
           value = loanTerm,
-          onValueChange = {
-            loanTerm = it
-                          },
           label = stringResource(R.string.loan_term_label),
           icon = {},
-          modifier = Modifier.padding(bottom = 32.dp)
+          // lambda function to update loanTerm
+//          onValueChange = { value -> loanTerm = value }
+          // you can omit the argument name and refer to it as `it`
+          onValueChange = { loanTerm = it },
+        )
+
+        Button(onClick = {
+          monthlyPayment = calculateMonthlyPayment(
+            loanAmount.toDouble(), interestRate.toDouble(), loanTerm.toInt()
+          ).toString()
+        }) {
+          Text(stringResource(R.string.calculate))
+        }
+
+        Text(
+          text = "Monthly Payment: $ ${monthlyPayment}", modifier = Modifier.padding(top = 32.dp)
         )
       }
     }
   }
 }
+
+fun calculateMonthlyPayment(loanAmount: Double, interestRate: Double, loanTerm: Int): Double {
+  // monthly payment = (loanAmount) * (interestRate / 12) / (1 - (1 + interestRate / 12)^(-loanTerm * 12))
+  val interest = interestRate / 100 / 12
+  val monthlyPayment = loanAmount * (interest / (1 - (1 + interest).pow(-loanTerm.toDouble())))
+  return round(monthlyPayment)
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,11 +155,11 @@ fun AppHeader(modifier: Modifier = Modifier) {
 
 @Composable
 fun EditNumberField(
+  modifier: Modifier = Modifier,
   value: String,
   onValueChange: (String) -> Unit,
   label: String = "",
   icon: @Composable (() -> Unit)?,
-  modifier: Modifier = Modifier,
 ) {
   TextField(
     value = value,
